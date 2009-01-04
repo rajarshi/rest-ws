@@ -70,6 +70,30 @@ def _getChemicalSpaceDocument(spaces):
     tree.write(page, encoding='UTF8')
     return page.getvalue()
 
+def _generateOutput(requestedContentTypes, pcs):
+    ctype = None
+    page = ''
+
+    for requestedType in requestedContentTypes:
+        if requestedType == 'text/plain':
+            ctype = 'text/plain'
+            textarray = []
+            for row in scores2d:
+                textarray.append(' '.join([str(x) for x in row]))
+            textarray = '\n'.join(textarray)
+            page = textarray
+        elif requestedType == 'text/html':
+            ctype = 'text/html'
+            textarray = []
+            for row in scores2d:
+                textarray.append('<tr>'+''.join([ '<td>'+str(x)+'</td>\n' for x in row ])+'</tr>\n')
+            page = '<html><body><table>'+'\n'.join(textarray)+'</table></body></html>'
+        elif requestedType == 'application/json':
+            import jsonlib
+            ctype = 'application/json'
+            page = jsonlib.write(scores2d.tolist())
+    return ctype, page
+        
 def handler(req):
     uriParts = req.uri.split('/')
 
@@ -113,7 +137,7 @@ def handler(req):
     
     centeredData = data - mean
     scores = numpy.dot(centeredData, numpy.transpose(pcs))
-    scores2d = scores[:(scores.shape[0]), :numComponent]
+    scores = scores[:(scores.shape[0]), :numComponent]
 
     headers_in = req.headers_in
     try:
@@ -124,28 +148,8 @@ def handler(req):
         ## (Google Spreadsheets) does not provide an Accept header
         accept = ['text/html']
         
-    ctype = 'text/plain'
-    page = ''
-
-    if accept[0] == 'text/plain':
-        ctype = 'text/plain'
-        textarray = []
-        for row in scores2d:
-            textarray.append(' '.join([str(x) for x in row]))
-        textarray = '\n'.join(textarray)
-        page = textarray
-    elif accept[0] == 'text/html':
-        ctype = 'text/html'
-        textarray = []
-        for row in scores2d:
-            textarray.append('<tr>'+''.join([ '<td>'+str(x)+'</td>\n' for x in row ])+'</tr>\n')
-        page = '<html><body><table>'+'\n'.join(textarray)+'</table></body></html>'
-    elif accept[0] == 'application/json':
-        import jsonlib
-        ctype = 'application/json'
-        page = jsonlib.write(scores2d.tolist())
-        
-    else:
+    ctype, page = _generateOutput(accept, scores)
+    if not ctype:
         return apache.HTTP_NOT_ACCEPTABLE
 
     req.content_type = ctype
