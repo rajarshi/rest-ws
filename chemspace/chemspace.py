@@ -82,16 +82,20 @@ def _generateOutput(requestedContentTypes, pcs):
                 textarray.append(' '.join([str(x) for x in row]))
             textarray = '\n'.join(textarray)
             page = textarray
+            break
         elif requestedType == 'text/html':
             ctype = 'text/html'
             textarray = []
             for row in scores2d:
                 textarray.append('<tr>'+''.join([ '<td>'+str(x)+'</td>\n' for x in row ])+'</tr>\n')
             page = '<html><body><table>'+'\n'.join(textarray)+'</table></body></html>'
+            break
         elif requestedType == 'application/json':
             import jsonlib
             ctype = 'application/json'
             page = jsonlib.write(scores2d.tolist())
+            break
+
     return ctype, page
         
 def handler(req):
