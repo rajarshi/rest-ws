@@ -78,7 +78,7 @@ def _generateOutput(requestedContentTypes, pcs):
         if requestedType == 'text/plain':
             ctype = 'text/plain'
             textarray = []
-            for row in scores2d:
+            for row in pcs:
                 textarray.append(' '.join([str(x) for x in row]))
             textarray = '\n'.join(textarray)
             page = textarray
@@ -86,14 +86,14 @@ def _generateOutput(requestedContentTypes, pcs):
         elif requestedType == 'text/html':
             ctype = 'text/html'
             textarray = []
-            for row in scores2d:
+            for row in pcs:
                 textarray.append('<tr>'+''.join([ '<td>'+str(x)+'</td>\n' for x in row ])+'</tr>\n')
             page = '<html><body><table>'+'\n'.join(textarray)+'</table></body></html>'
             break
         elif requestedType == 'application/json':
             import jsonlib
             ctype = 'application/json'
-            page = jsonlib.write(scores2d.tolist())
+            page = jsonlib.write(pcs.tolist())
             break
 
     return ctype, page
