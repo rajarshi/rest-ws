@@ -1,3 +1,7 @@
+## Rajarshi Guha <rajarshi.guha@gmail.com>
+##
+## Requires SOAPpy http://downloads.sourceforge.net/pywebsvcs/SOAPpy-0.12.0.tar.gz?modtime=1109072997&big_mirror=0
+
 from mod_python import apache
 import SOAPpy
 import sys, string
