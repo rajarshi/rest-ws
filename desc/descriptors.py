@@ -27,23 +27,32 @@ def handler(req):
     s = SOAPpy.WSDL.Proxy('http://rguha.ath.cx:8080/cdkws/services/Descriptors?wsdl')
 
     uriParts = req.uri.split('/')
-    smiles = uriParts[-1]
+    smiles = '/'.join(uriParts[-1])
 
     if req.method not in ['GET']:
         req.err_headers_out['Allow'] = 'GET'
         raise apache.SERVER_RETURN, apache.HTTP_METHOD_NOT_ALLOWED
 
+    smiles = None
+    descriptor = None
+
+    # get all available descriptors
     if uriParts[-1] == 'descriptors':
         req.content_type = 'text/xml'
-        req.write(getSpecification('all'))        
+        req.write(getSpecification('all'))
+        return apache.OK
 
-    elif uriParts[-2] == 'descriptors' and uriParts[-1].startswith('org.openscience.cdk.qsar.descriptors.molecular'):
+    # get all available molecular descriptors
+    if uriParts[-2] == 'descriptors' and uriParts[-1].startswith('org.openscience.cdk.qsar.descriptors.molecular'):
         req.content_type = 'text/xml'
         req.write(getSpecification(uriParts[-1]))
-
+        return apache.OK
+    
     ## here we assume that if descriptors is second last, then
     ## last must be the SMILES
-    elif uriParts[-2] == 'descriptors': 
+    descIdx = uriParts.index('descriptors')
+    if not uriParts[descIdx+1].startswith('org.openscience'): # all descriptors for the SMILES
+        smiles = '/'.join(uriParts[(descIdx+1):])
         descClasses = s.getAvailableDescriptorNames("all").data
         
         ET._namespace_map['http://www.w3.org/1999/xlink'] = 'xlink'
@@ -61,9 +70,10 @@ def handler(req):
 
     ## here we assume that if the package name is second last, then
     ## last must be the SMILES       
-    elif uriParts[-2].startswith('org.openscience.cdk.qsar.descriptors.molecular'):
+    else:
+        smiles = '/'.join(uriParts[(descIdx+2):])        
         try:
-            descDoc = s.evaluateDescriptors( [uriParts[-2]], smiles )
+            descDoc = s.evaluateDescriptors( [uriParts[descIdx+1]], smiles )
         except Exception, e:
             req.content_type = 'text/plain'
             req.write(str(e))
@@ -71,8 +81,5 @@ def handler(req):
         
         req.content_type = 'text/xml'
         req.write(descDoc)
-    else:
-        return apache.HTTP_BAD_REQUEST
- 
         
     return apache.OK

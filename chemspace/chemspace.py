@@ -101,13 +101,14 @@ def _generateOutput(requestedContentTypes, pcs):
 def handler(req):
     uriParts = req.uri.split('/')
 
+
     tmp = uriParts.index('chemspace')
     if len(uriParts) == tmp+2: ## return the list of available spaces
         req.content_type = 'text/xml'
         req.write(_getChemicalSpaceDocument([('default', 'AlogP, TPSA, num rot bond, MW', 4)]))
         return apache.OK
 
-    if len(uriParts) != tmp+3 and len(uriParts) != tmp+4:
+    if len(uriParts) < tmp+3 and len(uriParts) < tmp+4:
         return apache.HTTP_NOT_FOUND
 
     spaceDef = uriParts[tmp+1]
