@@ -59,7 +59,7 @@ def handler(req):
     # get all available molecular descriptors
     if uriParts[-2] == 'descriptors' and uriParts[-1].startswith('org.openscience.cdk.qsar.descriptors.molecular'):
         req.content_type = 'text/xml'
-        req.write(getSpecification(uriParts[-1]))
+        req.write(getSpecification(uriParts[-1], req.content_type))
         return apache.OK
     
     ## here we assume that if descriptors is second last, then
