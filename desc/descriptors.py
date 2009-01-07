@@ -5,10 +5,17 @@ from elementtree.ElementTree import XML
 
 base = 'http://rguha.ath.cx/~rguha/cicc/rest/desc/descriptors'
 
-def getSpecification(descClass):
+def getSpecification(descClass, ctype):
     s = SOAPpy.WSDL.Proxy('http://rguha.ath.cx:8080/cdkws/services/Descriptors?wsdl')
     if descClass == 'all':
         descClasses = s.getAvailableDescriptorNames("all").data
+
+        if ctype == 'text/plain':
+            s = ""
+            for className in descClasses:
+                s += className+"\n"
+            return s
+        
         ET._namespace_map['http://www.w3.org/1999/xlink'] = 'xlink'
         root = ET.Element("specification-list")
         for className in descClasses:
@@ -36,10 +43,17 @@ def handler(req):
     smiles = None
     descriptor = None
 
+    
     # get all available descriptors
     if uriParts[-1] == 'descriptors':
         req.content_type = 'text/xml'
-        req.write(getSpecification('all'))
+        headers_in = req.headers_in
+        try:
+            accept = headers_in['Accept']
+            if accept == 'text/plain': req.content_type = 'text/plain'
+        except KeyError:
+            pass
+        req.write(getSpecification('all', req.content_type))
         return apache.OK
 
     # get all available molecular descriptors
