@@ -1,5 +1,5 @@
 SetHandler mod_python 
-PythonHandler descriptors
+PythonHandler descs
 PythonDebug On
 <Files ~ "\.(gif|html|jpg|png|css)$">
    SetHandler default-handler
