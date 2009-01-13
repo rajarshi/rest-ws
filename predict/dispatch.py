@@ -1,5 +1,5 @@
 from mod_python import apache
-import SOAPpy, sys, string, StringIO, base64, urllib, os, os.path
+import sys, urllib, os, os.path
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import XML
 
@@ -95,7 +95,6 @@ def handler(req):
     if uriParts[-3] == 'predict' and uriParts[-2] in [x.getName() for x in models]:
         ## get a prediction from this model
         predicted = _getPrediction(_getModelDoc(models, uriParts[-2]), uriParts[-1])
-        
         req.content_type = 'text/plain'
         req.write(str(predicted))
         return apache.OK
