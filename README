@@ -18,11 +18,11 @@ encoded SMILES string.
 
 The entry point to this service is dispatch.py which investigates the
 URL to identify which model is to be used to obtain predictions. To
-obtain a list of models visit the URL
+obtain a list of models visit the URL (return type is text/plain)
 
 /predict
 
-To get the details of a model, visit
+To get the details of a model (return type is text/xml), visit
 
 /predict/ModelName
 
@@ -35,20 +35,24 @@ model name is specified, a HTTP 404 error is returned.
 
 Each model should be stored in a RDA file (use "save" in
 R). Currently, only models that have an associated "predict" method
-are considered. Along with the model file, a manifest file (filename
-should end in "manifest") should be
-provided. This is an XML file of the form:
+are considered. The service can handle multiple models via a model
+manifest. This is an XML document, listing the details of one or more 
+models and is shown schematically below:
 
 <modelManifest>
-  <author>The Modeler</author>
-  <date>01-13-2009</date>
-  <description>A description of the model</description>	
-  <descriptors>
-    <descriptor class="xxx" value="xxx" />
-    <descriptor class="xxx" value="xxx" />
-    <descriptor class="xxx" value="xxx" />
-  </descriptors>
-  <model rda="theModel.Rda">
+  <model title="A model title" name="ModelName" rda="theModel.Rda">
+    <author>The Modeler</author>
+    <date>01-13-2009</date>
+    <description>A description of the model</description>	
+    <descriptors>
+      <descriptor class="xxx" value="xxx" />
+      <descriptor class="xxx" value="xxx" />
+      <descriptor class="xxx" value="xxx" />
+    </descriptors>
+  <model>
+  <model ... >
+    ...
+  </model>
 </modelManifest>
 
 Essentially the manifest describes the descriptors required for the
