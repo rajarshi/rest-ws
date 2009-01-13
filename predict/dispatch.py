@@ -13,6 +13,11 @@ class ModelDoc:
     def __init__(self, xml):
         self._xml = xml
 
+        descs = self._xml.findall("descriptors/descriptor")
+        self._descDict = {}
+        for desc in descs:
+            self._descDict[desc.attrib['value']] = desc.attrib['class']
+
     def getName(self):
         return self._xml.attrib['name']
     
@@ -24,9 +29,6 @@ class ModelDoc:
 
     def getModelFileName(self):
         return self._xml.attrib['rda']
-
-    def setDescriptorDictionary(self, d):
-        self._descDict = d
 
 def _descDictToDataFrame(d):
     newd = {}
@@ -60,7 +62,8 @@ def _getPrediction(model, encodedSmiles):
     #rinterp("""load('/Users/rguha/src/rest-ws/predict/test-model.Rda')""")
     ##rinterp.load('/Users/rguha/src/rest-ws/predict/test-model.Rda')
     
-    return model.getModelFileName()
+    #return model.getModelFileName()
+    return descriptors
 
 def handler(req):
 
@@ -70,14 +73,7 @@ def handler(req):
     modelElements = root.findall("model")
     for modelElement in modelElements:
         doc = ModelDoc(modelElement)
-        
-        descs = modelElement.findall("descriptors/descriptor")
-        d = {}
-        for desc in descs:
-            d[desc.attrib['value']] = desc.attrib['class']
-        doc.setDescriptorDictionary(d)
         models.append(doc)
-        
 
     uriParts = req.uri.split('/')
     if uriParts[-1] == '': uriParts = uriParts[:-1]
