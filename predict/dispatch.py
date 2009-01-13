@@ -14,15 +14,16 @@ class ModelDoc:
         self._xml = xml
 
     def getName(self):
-        return self._name
+        return self._xml.attrib['name']
     
     def getDescriptorDictionary(self):
         return self._descDict
 
     def getXML(self):
         return self._xml
-    def setName(self, name):
-        self._name = name
+
+    def getModelFileName(self):
+        return self._xml.attrib['rda']
 
     def setDescriptorDictionary(self, d):
         self._descDict = d
@@ -59,7 +60,7 @@ def _getPrediction(model, encodedSmiles):
     #rinterp("""load('/Users/rguha/src/rest-ws/predict/test-model.Rda')""")
     ##rinterp.load('/Users/rguha/src/rest-ws/predict/test-model.Rda')
     
-    return descriptors
+    return model.getModelFileName()
 
 def handler(req):
 
@@ -69,7 +70,6 @@ def handler(req):
     modelElements = root.findall("model")
     for modelElement in modelElements:
         doc = ModelDoc(modelElement)
-        doc.setName(modelElement.attrib['name'])
         
         descs = modelElement.findall("descriptors/descriptor")
         d = {}
