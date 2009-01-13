@@ -27,8 +27,6 @@ class ModelDoc:
     def setDescriptorDictionary(self, d):
         self._descDict = d
 
-    
-
 def _descDictToDataFrame(d):
     newd = {}
     for key in d.keys():

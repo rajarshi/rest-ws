@@ -33,11 +33,16 @@ To obtain a prediction from a model, visit
 where SMILES should be the Base64 encoded SMILES string. If an invalid
 model name is specified, a HTTP 404 error is returned.
 
-Each model should be stored in a RDA file (use "save" in
+Each model should be stored in a Rda file (use "save" in
 R). Currently, only models that have an associated "predict" method
-are considered. The service can handle multiple models via a model
-manifest. This is an XML document, listing the details of one or more 
-models and is shown schematically below:
+are considered. Furthermore, the file should have a single model
+object called "model". This is currently a bit restrictive and future
+versions will probably encode the name of the model object in the
+manifest.
+
+The service can handle multiple models via a model manifest. This is
+an XML document, listing the details of one or more models and is
+shown schematically below:
 
 <modelManifest>
   <model title="A model title" name="ModelName" rda="theModel.Rda">
@@ -56,6 +61,7 @@ models and is shown schematically below:
 </modelManifest>
 
 Essentially the manifest describes the descriptors required for the
+model, along with other details such as the Rda file containing the
 model. Right now only CDK descriptors are supported and are accessed
 via the descriptor REST service. The _class_ attribute should be the fully
 qualified class name of the descriptor and _value_ should be the name
