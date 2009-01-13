@@ -1,0 +1,62 @@
+A collection of mod_python based REST services. Many of these services
+are actually simple front ends to other SOAP based web services. While
+the code can be downloaded and run from any machine (with mod_python
+and Apache) they will be dependent on remote SOAP services.
+
+* predict
+  -------
+Requrements: Python 2.4 or better
+	     R 2.7.2 or better
+             rpy2
+
+Dependency : descriptor service
+           
+Services that will use R via rpy2 to obtain predictions from
+previously built statisticalk models. These services are oriented
+to QSAR models, so the input to these services is usually a Base64
+encoded SMILES string.
+
+The entry point to this service is dispatch.py which investigates the
+URL to identify which model is to be used to obtain predictions. To
+obtain a list of models visit the URL
+
+/predict
+
+To get the details of a model, visit
+
+/predict/ModelName
+
+To obtain a prediction from a model, visit
+
+/predict/ModelName/SMILES
+
+where SMILES should be the Base64 encoded SMILES string. If an invalid
+model name is specified, a HTTP 404 error is returned.
+
+Each model should be stored in a RDA file (use "save" in
+R). Currently, only models that have an associated "predict" method
+are considered. Along with the model file, a manifest file (filename
+should end in "manifest") should be
+provided. This is an XML file of the form:
+
+<modelManifest>
+  <author>The Modeler</author>
+  <date>01-13-2009</date>
+  <description>A description of the model</description>	
+  <descriptors>
+    <descriptor class="xxx" value="xxx" />
+    <descriptor class="xxx" value="xxx" />
+    <descriptor class="xxx" value="xxx" />
+  </descriptors>
+  <model rda="theModel.Rda">
+</modelManifest>
+
+Essentially the manifest describes the descriptors required for the
+model. Right now only CDK descriptors are supported and are accessed
+via the descriptor REST service. The _class_ attribute should be the fully
+qualified class name of the descriptor and _value_ should be the name
+of the specific descriptor value employed in the model. See
+
+http://cheminfo.informatics.indiana.edu/~rguha/code/java/nightly-1.2.x/dnames.html#molecule
+
+for a list of descriptors and their individual values.
