@@ -3,6 +3,7 @@ import sys, urllib, os, os.path
 import elementtree.ElementTree as ET
 from elementtree.ElementTree import XML
 
+import rpy2
 import rpy2.robjects as ro
 rinterp = ro.r
 
@@ -59,11 +60,11 @@ def _getPrediction(model, encodedSmiles):
     descdf = _descDictToDataFrame(descriptors)
 
     ## load the model and get a prediction
-    #rinterp("""load('/Users/rguha/src/rest-ws/predict/test-model.Rda')""")
-    ##rinterp.load('/Users/rguha/src/rest-ws/predict/test-model.Rda')
-    
-    #return model.getModelFileName()
-    return descriptors
+    x = rinterp.load('/Users/rguha/src/rest-ws/predict/jcsol-01142009.Rda')
+    if x[0] != 'model': return None
+    model = rpy2.rinterface.globalEnv.get("model")
+    prediction = rinterp.predict(model, newdata=descdf)
+    return prediction[0]
 
 def handler(req):
 
