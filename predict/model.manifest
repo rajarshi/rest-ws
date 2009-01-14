@@ -1,14 +1,38 @@
 <modelManifest>
-<model name="Solubility1" title="Prediction of Solubility in Methanol" rda="jcsol-01132009.Rda">
-  <author>Rajarshi Guha</author>
-  <date>01-13-2009</date>
-  <description>
-  Linear regression model to predict solubility in methanol. Training set size was 62 molecules. Since some molecules had multiple measurements, I averaged the measurements for a single molecule to get a single value of solubility. Note that the model excluded O=C(O)C and O=CO from the training set.
-  </description>	
-  <descriptors>
-    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor" value="WTPT-4" />
-    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor" value="WTPT-5" />
-    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor" value="C2SP3" />
-  </descriptors>
-</model>
+    <model name="Solubility1" title="Prediction of Solubility in Methanol" rda="jcsol-01132009.Rda">
+	<author>Rajarshi Guha</author>
+	<date>01-13-2009</date>
+	<description>
+	    [OBSOLETE]
+	    Linear regression model to predict solubility in methanol. Training
+	    set size was 62 molecules. Since some molecules had multiple
+	    measurements, I averaged the measurements for a single molecule to get
+	    a single value of solubility. Note that the model excluded O=C(O)C and
+	    O=CO from the training set.
+	</description>	
+	<descriptors>
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor" value="WTPT-4" />
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.WeightedPathDescriptor" value="WTPT-5" />
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor" value="C2SP3" />
+	</descriptors>
+    </model>
+
+    <model name="Solubility2" title="Prediction of Solubility in Methanol" rda="jcsol-01142009.Rda">
+	<author>Rajarshi Guha</author>
+	<date>01-14-2009</date>
+	<description>
+	    Linear regression model to predict solubility in methanol. Training
+	    set size was 57 molecules. Since some molecules had multiple
+	    measurements, I averaged the measurements for a single molecule to get
+	    a single value of solubility. Note that the model excluded O=C(O)C and
+	    O=CO and inorganics from the training set.
+	</description>	
+	<descriptors>
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.AromaticBondsCountDescriptor" value="nAromBond" />
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.HBondAcceptorCountDescriptor" value="nHBAcc" />
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.CarbonTypesDescriptor" value="C2SP3" />
+	    <descriptor class="org.openscience.cdk.qsar.descriptors.molecular.KierHallSmartsDescriptor" value="khs.ddsN" />
+	</descriptors>
+    </model>
+
 </modelManifest>
