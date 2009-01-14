@@ -60,7 +60,7 @@ def _getPrediction(model, encodedSmiles):
     descdf = _descDictToDataFrame(descriptors)
 
     ## load the model and get a prediction
-    x = rinterp.load('/Users/rguha/src/rest-ws/predict/jcsol-01142009.Rda')
+    x = rinterp.load(os.path.join(absolutePath, model.getModelFileName()))
     if x[0] != 'model': return None
     model = rpy2.rinterface.globalEnv.get("model")
     prediction = rinterp.predict(model, newdata=descdf)
