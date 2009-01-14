@@ -28,7 +28,7 @@
 ## Requires numpy, jsonlib
 
 from mod_python import apache
-import urllib, StringIO, base64
+import urllib, StringIO
 from elementtree.ElementTree import ElementTree as ET
 from elementtree.ElementTree import XML
 from elementtree.ElementTree import Element, SubElement, tostring
@@ -47,7 +47,7 @@ def _getDescriptors(smiles):
     vals = []
     for key in keys:
         dnames = defaultChemicalSpace[key]
-        url = descriptorBaseUrl + '.' + key + '/' + base64.b64encode(smiles)
+        url = descriptorBaseUrl + '.' + key + '/' + smiles
         xml = ''.join(urllib.urlopen(url).readlines())
         root = XML(xml)
         values = root.findall('Descriptor')
