@@ -1,7 +1,7 @@
 from mod_python import apache
 import sys, urllib, os, os.path
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import XML
+import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import XML
 
 import rpy2
 import rpy2.robjects as ro

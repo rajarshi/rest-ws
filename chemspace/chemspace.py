@@ -29,9 +29,9 @@
 
 from mod_python import apache
 import urllib, StringIO
-from elementtree.ElementTree import ElementTree as ET
-from elementtree.ElementTree import XML
-from elementtree.ElementTree import Element, SubElement, tostring
+import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import XML
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 descriptorBaseUrl = 'http://rguha.ath.cx/~rguha/cicc/rest/desc/descriptors/org.openscience.cdk.qsar.descriptors.molecular'
 

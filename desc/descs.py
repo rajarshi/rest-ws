@@ -1,7 +1,7 @@
 from mod_python import apache
 import SOAPpy, sys, string, StringIO, base64
-import elementtree.ElementTree as ET
-from elementtree.ElementTree import XML
+import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import XML
 
 base = 'http://rguha.ath.cx/~rguha/cicc/rest/desc/descriptors'
 
