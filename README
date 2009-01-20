@@ -3,6 +3,11 @@ are actually simple front ends to other SOAP based web services. While
 the code can be downloaded and run from any machine (with mod_python
 and Apache) they will be dependent on remote SOAP services.
 
+* format
+  ------
+
+Requires that OpenBabel and its Python bindings be installed
+
 * predict
   -------
 Requrements: Python 2.4 or better
