@@ -8,6 +8,31 @@ and Apache) they will be dependent on remote SOAP services.
 
 Requires that OpenBabel and its Python bindings be installed
 
+* substruct
+  ---------
+
+Requires that OpenBabel and its Python bindings be installed
+
+Supports GET or POST requests. If the former then the URL should be of the form
+
+/substruct/TARGET/QUERY
+
+where TARGET is a SMILES string for the target molecule and QUERY is a SMARTS
+(or SMILES) pattern. Both arguments should be appropriately escaped. The return 
+value is either the string "true" or "false" if the query matches the pattern
+respectively.
+
+If a POST request is recieved then the service expects two form variables:
+
+  - query - a single string containing the SMARTS pattern
+  - target - a comma separated string of one or more SMILES strings
+
+The return value will be a multiline plain text document. The number of
+lines equals the number of input SMILES. Each line is either "true", "false"
+or "fail". Thus if the i'th row is "true", the i'th target molecule contained the 
+query. The string "fail" implies that there was an error parsing the SMILES
+string.
+
 * predict
   -------
 Requrements: Python 2.4 or better
